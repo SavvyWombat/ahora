@@ -1,0 +1,15 @@
+composer.lock
+package-lock.json
+
+docs/
+vendor/
+
+### Sublime Text ###
+*.sublime-workspace
+
+### PhpStorm ###
+.idea
+# CMake
+cmake-build-debug/
+# IntelliJ
+out/
