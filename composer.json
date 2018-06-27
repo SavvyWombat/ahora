@@ -1,0 +1,31 @@
+{
+    "name": "savvywombat/ahora",
+    "description": "DateTime extension",
+    "type": "library",
+    "homepage": "https://github.com/SavvyWombat/ahora",
+    "keywords": ["ahora", "savvywombat", "savvy wombat", "date", "time", "datetime", "interval"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stuart Jones",
+            "email": "stuart@savvywombat.com.au"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "SavvyWombat\\Ahora\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SavvyWombat\\Ahora\\Tests\\": "tests/"
+        }
+    }
+}
