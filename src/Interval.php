@@ -32,6 +32,12 @@ class Interval
     ];
 
 
+    /**
+     * Create an interval from a PHP DateInterval
+     *
+     * @param DateInterval $dateInterval
+     * @return Interval
+     */
     public static function createFromDateInterval(DateInterval $dateInterval)
     {
         $interval = new Interval();
