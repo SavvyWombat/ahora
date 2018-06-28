@@ -58,13 +58,34 @@ class Interval
 
 
     /**
-     * Get the number of minutes in the interval
+     * Get the number of minutes since the last whole hour
      *
      * @return int
      */
     protected function getMinutes()
     {
+        return $this->getRealMinutes() % 60;
+    }
+
+    /**
+     * Get the total number of minutes in the interval
+     *
+     * @return int
+     */
+    protected function getRealMinutes()
+    {
         return (int) ($this->seconds / 60);
+    }
+
+
+    /**
+     * Get the total number of hours in the interval
+     *
+     * @return int
+     */
+    protected function getHours()
+    {
+        return (int) ($this->getRealMinutes() / 60);
     }
 
 

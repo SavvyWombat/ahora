@@ -11,8 +11,7 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::addSeconds
-     * @uses \SavvyWombat\Ahora\Interval::getSeconds
-     * @uses \SavvyWombat\Ahora\Interval::__get
+     * @uses \SavvyWombat\Ahora\Interval
      */
     public function adding_seconds()
     {
@@ -39,8 +38,7 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::getSeconds
-     * @uses \SavvyWombat\Ahora\Interval::addSeconds
-     * @uses \SavvyWombat\Ahora\Interval::__get
+     * @uses \SavvyWombat\Ahora\Interval
      */
     public function only_return_remaining_seconds_since_last_minute()
     {
@@ -60,8 +58,7 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::getRealSeconds
-     * @uses \SavvyWombat\Ahora\Interval::addSeconds
-     * @uses \SavvyWombat\Ahora\Interval::__get
+     * @uses \SavvyWombat\Ahora\Interval
      */
     public function return_all_the_seconds()
     {
@@ -81,8 +78,7 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::getMinutes
-     * @uses \SavvyWombat\Ahora\Interval::addSeconds
-     * @uses \SavvyWombat\Ahora\Interval::__get
+     * @uses \SavvyWombat\Ahora\Interval
      */
     public function calculates_minutes_from_seconds()
     {
@@ -104,7 +100,7 @@ class IntervalTest extends TestCase
      * @covers \SavvyWombat\Ahora\Interval::addMinutes
      * @uses \SavvyWombat\Ahora\Interval::getMinutes
      * @uses \SavvyWombat\Ahora\Interval::getRealSeconds
-     * @uses \SavvyWombat\Ahora\Interval::__get
+     * @uses \SavvyWombat\Ahora\Interval
      */
     public function adding_minutes()
     {
@@ -122,6 +118,40 @@ class IntervalTest extends TestCase
             600,
             $interval->realSeconds,
             'interval should return 600 real seconds'
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getHours
+     * @covers \SavvyWombat\Ahora\Interval::getMinutes
+     * @covers \SavvyWombat\Ahora\Interval::getRealMinutes
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function minutes_become_hours()
+    {
+        $interval = new Interval();
+
+        $interval->addMinutes(225);
+
+        $this->assertEquals(
+            3,
+            $interval->hours,
+            '225 minutes is over 3 hours'
+        );
+
+        $this->assertEquals(
+            45,
+            $interval->minutes,
+            '225 minutes is 45 minutes past 3 hours'
+        );
+
+        $this->assertEquals(
+            225,
+            $interval->realMinutes,
+            'we added 225 minutes'
         );
     }
 }
