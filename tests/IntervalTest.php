@@ -312,4 +312,29 @@ class IntervalTest extends TestCase
             $interval->days
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::addInterval
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function add_another_interval()
+    {
+        $interval = new Interval();
+        $interval->addSeconds(30);
+
+
+        $otherInterval = new Interval();
+        $otherInterval->addSeconds(70);
+
+
+        $interval->addInterval($otherInterval);
+
+        $this->assertEquals(
+            100,
+            $interval->realSeconds
+        );
+    }
 }
