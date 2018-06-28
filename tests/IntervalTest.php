@@ -57,7 +57,7 @@ class IntervalTest extends TestCase
 
     /**
      * @test
-     * @covers \SavvyWombat\Ahora\Interval::getRealSeconds
+     * @covers \SavvyWombat\Ahora\Interval::getReal
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function return_all_the_seconds()
@@ -77,7 +77,7 @@ class IntervalTest extends TestCase
 
     /**
      * @test
-     * @covers \SavvyWombat\Ahora\Interval::getMinutes
+     * @covers \SavvyWombat\Ahora\Interval::get
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function calculates_minutes_from_seconds()
@@ -98,8 +98,6 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::add
-     * @uses \SavvyWombat\Ahora\Interval::getMinutes
-     * @uses \SavvyWombat\Ahora\Interval::getRealSeconds
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function adding_minutes()
@@ -125,9 +123,7 @@ class IntervalTest extends TestCase
 
     /**
      * @test
-     * @covers \SavvyWombat\Ahora\Interval::getHours
-     * @covers \SavvyWombat\Ahora\Interval::getMinutes
-     * @covers \SavvyWombat\Ahora\Interval::getRealMinutes
+     * @covers \SavvyWombat\Ahora\Interval::get
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function minutes_become_hours()
@@ -159,9 +155,7 @@ class IntervalTest extends TestCase
 
     /**
      * @test
-     * @covers \SavvyWombat\Ahora\Interval::getDays
-     * @covers \SavvyWombat\Ahora\Interval::getHours
-     * @covers \SavvyWombat\Ahora\Interval::getRealHours
+     * @covers \SavvyWombat\Ahora\Interval::get
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function hours_become_days()

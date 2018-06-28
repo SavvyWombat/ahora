@@ -9,6 +9,7 @@ namespace SavvyWombat\Ahora;
  * @package SavvyWombat\Ahora
  *
  * Time interval that allows simple addition/substraction for summing up and presenting
+ *
  */
 class Interval
 {
@@ -18,6 +19,11 @@ class Interval
     protected $seconds = 0;
 
 
+    /**
+     * @var array Multiplication factors used to get time values from the interval
+     *
+     * Defaults to 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds
+     */
     protected $factors = [
         'minutes' => [60, 'seconds'],
         'hours' => [60, 'minutes'],
@@ -77,54 +83,61 @@ class Interval
 
 
     /**
-     * Get the number of minutes since the last whole hour
+     * Gets the number of specified units
      *
+     * For example, if the interval is 225 seconds, and the number of minutes is requested,
+     * it will return 3 minutes.
+     *
+     * If the interval is 4000 seconds:
+     *  - hours = 1
+     *  - minutes = 6
+     *  - seconds = 40
+     *
+     * @param string $unit
      * @return int
+     * @throws \Exception
      */
-    protected function getMinutes()
+    public function get(string $unit)
     {
-        return $this->getRealMinutes() % 60;
+        if (!isset($this->factors[$unit])) {
+            throw new \Exception("'{$unit}' is not valid for this interval");
+        }
+
+        $value = (int) ($this->getReal($unit));
+
+        reset($this->factors);
+        while (!is_null(key($this->factors)) && key($this->factors) !== $unit) {
+            next($this->factors);
+        }
+        next($this->factors);
+        if (!is_null(key($this->factors))) {
+            $value %= current($this->factors)[0];
+        }
+
+        return (int) $value;
     }
 
-    /**
-     * Get the total number of minutes in the interval
-     *
-     * @return int
-     */
-    protected function getRealMinutes()
-    {
-        return (int) ($this->seconds / 60);
-    }
-
 
     /**
-     * Get the number of hours since that last whole day
+     * Get the total number of specified units
      *
+     * For example, an interval of 4000 seconds will return 66 minutes when requested
+     *
+     * @param string $unit
      * @return int
+     * @throws \Exception
      */
-    protected function getHours()
+    public function getReal(string $unit)
     {
-        return $this->getRealHours() % 24;
-    }
+        if ($unit === 'seconds') {
+            return (int) $this->getRealSeconds();
+        }
 
-    /**
-     * Get the total number of hours in the interval
-     *
-     * @return int
-     */
-    protected function getRealHours()
-    {
-        return (int) ($this->getRealMinutes() / 60);
-    }
+        if (!isset($this->factors[$unit])) {
+            throw new \Exception("'{$unit}' is not valid for this interval");
+        }
 
-    /**
-     * Get the total number of days in the interval
-     *
-     * @return int
-     */
-    protected function getDays()
-    {
-        return (int) ($this->getRealHours() / 24);
+        return (int) ($this->getReal($this->factors[$unit][1]) / $this->factors[$unit][0]);
     }
 
 
@@ -135,14 +148,20 @@ class Interval
         if (method_exists($this, $func)) {
             return $this->$func();
         }
+
+        if (substr($name, 0, 4) === "real") {
+            return $this->getReal(lcfirst(substr($name, 4)));
+        }
+
+        return $this->get($name);
     }
 
 
 
     public function __call(string $name, array $args)
     {
-        if (substr($name, 0, 3) == "add") {
-            $this->add(lcfirst(substr($name, 3)), $args[0]);
+        if (substr($name, 0, 3) === "add") {
+            return $this->add(lcfirst(substr($name, 3)), $args[0]);
         }
     }
 }
