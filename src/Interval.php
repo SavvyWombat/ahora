@@ -27,6 +27,14 @@ class Interval
         $this->seconds += $seconds;
     }
 
+    /**
+     * @param int $minutes
+     */
+    public function addMinutes(int $minutes)
+    {
+        $this->seconds += $minutes * 60;
+    }
+
 
     /**
      * Get the number of seconds since the last whole minute in the interval

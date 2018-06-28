@@ -96,4 +96,32 @@ class IntervalTest extends TestCase
             'interval should return 2 minutes for 150 seconds'
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::addMinutes
+     * @uses \SavvyWombat\Ahora\Interval::getMinutes
+     * @uses \SavvyWombat\Ahora\Interval::getRealSeconds
+     * @uses \SavvyWombat\Ahora\Interval::__get
+     */
+    public function adding_minutes()
+    {
+        $interval = new Interval();
+
+        $interval->addMinutes(10);
+
+        $this->assertEquals(
+            10,
+            $interval->minutes,
+            'interval should return 10 minutes'
+        );
+
+        $this->assertEquals(
+            600,
+            $interval->realSeconds,
+            'interval should return 600 real seconds'
+        );
+    }
 }
