@@ -53,6 +53,19 @@ class Interval
 
 
     /**
+     * Create an Interval using an ISO8601 interval specification
+     *
+     * @param string $interval_spec
+     * @return Interval
+     * @throws \Exception
+     */
+    public function createFromIntervalSpec(string $interval_spec)
+    {
+        return self::createFromDateInterval(new DateInterval($interval_spec));
+    }
+
+
+    /**
      * @return DateInterval
      * @throws \Exception
      */

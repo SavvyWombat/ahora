@@ -384,6 +384,38 @@ class IntervalTest extends TestCase
     }
 
 
+    public function create_from_interval_spec()
+    {
+        $interval = Interval::createFromIntervalSpec("P10DT9H8M7S");
+
+        $this->assertInstancOf(
+            Interval::class,
+            $interval,
+            'did not create an Interval'
+        );
+
+        $this->assertEquals(
+            10,
+            $interval->days
+        );
+
+        $this->assertEquals(
+            9,
+            $interval->hours
+        );
+
+        $this->assertEquals(
+            8,
+            $interval->minutes
+        );
+
+        $this->assertEquals(
+            7,
+            $interval->seconds
+        );
+    }
+
+
 
     /**
      * @test
