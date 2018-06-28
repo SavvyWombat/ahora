@@ -397,7 +397,52 @@ class IntervalTest extends TestCase
 
         $this->assertEquals(
             "P2DT7H33M20S",
-            $interval->intervalSpec
+            $interval->getIntervalSpec()
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getAsDateInterval()
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function outputs_a_date_interval()
+    {
+        $interval = new Interval();
+        $interval->addSeconds(100000); // 2 days, 5 hours, 26 minutes, 40 seconds
+
+        $dateInterval = $interval->getAsDateInterval();
+
+        $this->assertInstanceOf(
+            \DateInterval::class,
+            $dateInterval,
+            'did not return a PHP DateInterval'
+        );
+
+        $this->assertEquals(
+            1,
+            $dateInterval->d,
+            'incorrect number of days'
+        );
+
+        $this->assertEquals(
+            3,
+            $dateInterval->h,
+            'incorrect number of hours'
+        );
+
+        $this->assertEquals(
+            46,
+            $dateInterval->i,
+            'incorrect number of minutes'
+        );
+
+        $this->assertEquals(
+            40,
+            $dateInterval->s,
+            'incorrect number of seconds'
         );
     }
 }

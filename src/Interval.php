@@ -38,6 +38,7 @@ class Interval
      *
      * @param DateInterval $dateInterval
      * @return Interval
+     * @throws \Exception
      */
     public static function createFromDateInterval(DateInterval $dateInterval)
     {
@@ -52,6 +53,16 @@ class Interval
 
 
     /**
+     * @return DateInterval
+     * @throws \Exception
+     */
+    public function getAsDateInterval()
+    {
+        return new DateInterval($this->getIntervalSpec());
+    }
+
+
+    /**
      * Get the interval specification (ISO8601)
      *
      * This method currently ignores any unit of time greater than a day
@@ -59,7 +70,7 @@ class Interval
      * @return string
      * @throws \Exception
      */
-    protected function getIntervalSpec()
+    public function getIntervalSpec()
     {
         $spec = "P";
 
@@ -77,9 +88,8 @@ class Interval
             $spec .= $this->get('minutes') . "M";
         }
 
-        if ($this->get('seconds') > 0) {
-            $spec .= $this->get('seconds') . "S";
-        }
+        // always return at least 'PTOS'
+        $spec .= $this->get('seconds') . "S";
 
         return $spec;
     }
