@@ -18,6 +18,12 @@ class Interval
     protected $seconds = 0;
 
 
+    protected $factors = [
+        'minutes' => [60, 'seconds'],
+        'hours' => [60, 'minutes'],
+        'days' => [24, 'hours'],
+    ];
+
 
     /**
      * @param int $seconds
@@ -28,19 +34,24 @@ class Interval
     }
 
     /**
-     * @param int $minutes
+     * Add the specified amount of time to the interval (uses the __call method to allow addHours, for example)
+     *
+     * @param string $unit Any valid unit from the factors array, including the seconds array
+     * @param int $value The number of units to add to the interval
+     * @throws \Exception
      */
-    public function addMinutes(int $minutes)
+    protected function add(string $unit, int $value)
     {
-        $this->addSeconds($minutes * 60);
-    }
+        if ($unit === 'seconds') {
+            $this->addSeconds($value);
+            return;
+        }
 
-    /**
-     * @param int $hours
-     */
-    public function addHours(int $hours)
-    {
-        $this->addMinutes($hours * 60);
+        if (!isset($this->factors[$unit])) {
+            throw new \Exception("'{$unit}' is not valid for this interval");
+        }
+
+        $this->add($this->factors[$unit][1], $value * $this->factors[$unit][0]);
     }
 
 
@@ -117,15 +128,21 @@ class Interval
     }
 
 
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name)
+
+    public function __get(string $name)
     {
         $func = "get" . ucfirst($name);
         if (method_exists($this, $func)) {
             return $this->$func();
+        }
+    }
+
+
+
+    public function __call(string $name, array $args)
+    {
+        if (substr($name, 0, 3) == "add") {
+            $this->add(lcfirst(substr($name, 3)), $args[0]);
         }
     }
 }

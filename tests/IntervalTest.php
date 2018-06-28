@@ -97,7 +97,7 @@ class IntervalTest extends TestCase
 
     /**
      * @test
-     * @covers \SavvyWombat\Ahora\Interval::addMinutes
+     * @covers \SavvyWombat\Ahora\Interval::add
      * @uses \SavvyWombat\Ahora\Interval::getMinutes
      * @uses \SavvyWombat\Ahora\Interval::getRealSeconds
      * @uses \SavvyWombat\Ahora\Interval
