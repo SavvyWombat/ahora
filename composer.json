@@ -1,6 +1,6 @@
 {
     "name": "savvywombat/ahora",
-    "description": "DateTime extension",
+    "description": "Interval calculator to help sum up multiple time intervals and display the total elapsed days/hours/minutes/seconds",
     "type": "library",
     "homepage": "https://github.com/SavvyWombat/ahora",
     "keywords": ["ahora", "savvywombat", "savvy wombat", "date", "time", "datetime", "interval"],
