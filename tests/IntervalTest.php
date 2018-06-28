@@ -382,4 +382,22 @@ class IntervalTest extends TestCase
             'incorrect number of seconds set'
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getIntervalSpec
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function outputs_interval_spec()
+    {
+        $interval = new Interval();
+        $interval->addSeconds(200000); // 2 days, 5 hours, 26 minutes, 40 seconds
+
+        $this->assertEquals(
+            "P2DT7H33M20S",
+            $interval->intervalSpec
+        );
+    }
 }

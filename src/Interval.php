@@ -10,7 +10,6 @@ use DateInterval;
  * @package SavvyWombat\Ahora
  *
  * Time interval that allows simple addition/substraction for summing up and presenting
- *
  */
 class Interval
 {
@@ -35,6 +34,8 @@ class Interval
     /**
      * Create an interval from a PHP DateInterval
      *
+     * This method currently ignores any unit of time greater than a day
+     *
      * @param DateInterval $dateInterval
      * @return Interval
      */
@@ -47,6 +48,40 @@ class Interval
         $interval->addSeconds($dateInterval->s);
 
         return $interval;
+    }
+
+
+    /**
+     * Get the interval specification (ISO8601)
+     *
+     * This method currently ignores any unit of time greater than a day
+     *
+     * @return string
+     * @throws \Exception
+     */
+    protected function getIntervalSpec()
+    {
+        $spec = "P";
+
+        if ($this->get('days') > 0) {
+            $spec .= $this->get('days') . "D";
+        }
+
+        $spec .= "T";
+
+        if ($this->get('hours') > 0) {
+            $spec .= $this->get('hours') . "H";
+        }
+
+        if ($this->get('minutes') > 0) {
+            $spec .= $this->get('minutes') . "M";
+        }
+
+        if ($this->get('seconds') > 0) {
+            $spec .= $this->get('seconds') . "S";
+        }
+
+        return $spec;
     }
 
 
@@ -135,6 +170,10 @@ class Interval
      */
     public function get(string $unit)
     {
+        if ($unit === 'seconds') {
+            return (int) $this->getSeconds();
+        }
+
         if (!isset($this->factors[$unit])) {
             throw new \Exception("'{$unit}' is not valid for this interval");
         }
@@ -219,7 +258,7 @@ class Interval
      * Get a specific factor from this interval
      *
      * @param string $name
-     * @return mixed|null
+     * @return array|null
      */
     public function getFactor(string $name)
     {
