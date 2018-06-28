@@ -154,4 +154,38 @@ class IntervalTest extends TestCase
             'we added 225 minutes'
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getDays
+     * @covers \SavvyWombat\Ahora\Interval::getHours
+     * @covers \SavvyWombat\Ahora\Interval::getRealHours
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function hours_become_days()
+    {
+        $interval = new Interval();
+
+        $interval->addHours(100);
+
+        $this->assertEquals(
+            100,
+            $interval->realHours,
+            'we added 100 hours'
+        );
+
+        $this->assertEquals(
+            4,
+            $interval->days,
+            '100 hours is over 4 days'
+        );
+
+        $this->assertEquals(
+            4,
+            $interval->hours,
+            '100 hours is 4 hours past 4 days'
+        );
+    }
 }

@@ -32,7 +32,15 @@ class Interval
      */
     public function addMinutes(int $minutes)
     {
-        $this->seconds += $minutes * 60;
+        $this->addSeconds($minutes * 60);
+    }
+
+    /**
+     * @param int $hours
+     */
+    public function addHours(int $hours)
+    {
+        $this->addMinutes($hours * 60);
     }
 
 
@@ -79,13 +87,33 @@ class Interval
 
 
     /**
-     * Get the total number of hours in the interval
+     * Get the number of hours since that last whole day
      *
      * @return int
      */
     protected function getHours()
     {
+        return $this->getRealHours() % 24;
+    }
+
+    /**
+     * Get the total number of hours in the interval
+     *
+     * @return int
+     */
+    protected function getRealHours()
+    {
         return (int) ($this->getRealMinutes() / 60);
+    }
+
+    /**
+     * Get the total number of days in the interval
+     *
+     * @return int
+     */
+    protected function getDays()
+    {
+        return (int) ($this->getRealHours() / 24);
     }
 
 
