@@ -3,6 +3,7 @@
 
 namespace SavvyWombat\Ahora;
 
+use DateInterval;
 
 /**
  * Class Interval
@@ -29,6 +30,18 @@ class Interval
         'hours' => [60, 'minutes'],
         'days' => [24, 'hours'],
     ];
+
+
+    public static function createFromDateInterval(DateInterval $dateInterval)
+    {
+        $interval = new Interval();
+        $interval->addDays($dateInterval->d);
+        $interval->addHours($dateInterval->h);
+        $interval->addMinutes($dateInterval->i);
+        $interval->addSeconds($dateInterval->s);
+
+        return $interval;
+    }
 
 
     /**

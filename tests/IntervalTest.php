@@ -337,4 +337,49 @@ class IntervalTest extends TestCase
             $interval->realSeconds
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::createFromDateInterval
+     * @uses \DateInterval
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function create_from_date_interval()
+    {
+        $dateInterval = new \DateInterval("P2DT3H4M5S");
+
+        $interval = Interval::createFromDateInterval($dateInterval);
+
+        $this->assertInstanceOf(
+            Interval::class,
+            $interval,
+            'Interval not returned from create'
+        );
+
+        $this->assertEquals(
+            2,
+            $interval->days,
+            'incorrect number of days set'
+        );
+
+        $this->assertEquals(
+            3,
+            $interval->hours,
+            'incorrect number of hours set'
+        );
+
+        $this->assertEquals(
+            4,
+            $interval->minutes,
+            'incorrect number of minutes set'
+        );
+
+        $this->assertEquals(
+            5,
+            $interval->seconds,
+            'incorrect number of seconds set'
+        );
+    }
 }
