@@ -31,7 +31,12 @@ class Interval
     ];
 
 
-
+    /**
+     * Add another interval to this one
+     *
+     * @param Interval $otherInterval
+     * @return Interval
+     */
     public function addInterval(Interval $otherInterval)
     {
         $this->seconds += $otherInterval->realSeconds;
