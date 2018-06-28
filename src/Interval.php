@@ -33,10 +33,13 @@ class Interval
 
     /**
      * @param int $seconds
+     * @return Interval
      */
     public function addSeconds(int $seconds)
     {
         $this->seconds += $seconds;
+
+        return $this;
     }
 
     /**
@@ -57,7 +60,7 @@ class Interval
             throw new \Exception("'{$unit}' is not valid for this interval");
         }
 
-        $this->add($this->factors[$unit][1], $value * $this->factors[$unit][0]);
+        $this->add($this->factors[$unit][1], (int) ($value * $this->factors[$unit][0]));
     }
 
 
@@ -105,13 +108,11 @@ class Interval
 
         $value = (int) ($this->getReal($unit));
 
-        reset($this->factors);
-        while (!is_null(key($this->factors)) && key($this->factors) !== $unit) {
-            next($this->factors);
-        }
-        next($this->factors);
-        if (!is_null(key($this->factors))) {
-            $value %= current($this->factors)[0];
+        foreach ($this->factors as $f => $factor) {
+            if ($factor[1] === $unit) {
+                $value %= $factor[0];
+                break;
+            }
         }
 
         return (int) $value;
@@ -141,6 +142,62 @@ class Interval
     }
 
 
+    /**
+     * Replace the factors and units used by this interval
+     *
+     * At least one factor must be multiplier for seconds, as this is the base unit of our interval
+     *
+     * @param array $factors
+     * @return $this
+     */
+    public function setFactors(array $factors)
+    {
+        $this->factors = $factors;
+
+        return $this;
+    }
+
+
+    /**
+     * Add or replace a specific factor use by this interval
+     *
+     * @param string $name
+     * @param array $factor [int $multiple, string $unit]
+     * @return $this
+     */
+    public function setFactor(string $name, array $factor)
+    {
+        $this->factors[$name] = $factor;
+
+        return $this;
+    }
+
+    /**
+     * Get all the factors for this interval
+     *
+     * @return array
+     */
+    public function getFactors()
+    {
+        return $this->factors;
+    }
+
+    /**
+     * Get a specific factor from this interval
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getFactor(string $name)
+    {
+        if (isset($this->factors[$name])) {
+            return $this->factors[$name];
+        }
+
+        return null;
+    }
+
+
 
     public function __get(string $name)
     {
@@ -161,7 +218,8 @@ class Interval
     public function __call(string $name, array $args)
     {
         if (substr($name, 0, 3) === "add") {
-            return $this->add(lcfirst(substr($name, 3)), $args[0]);
+            $this->add(lcfirst(substr($name, 3)), $args[0]);
+            return $this;
         }
     }
 }

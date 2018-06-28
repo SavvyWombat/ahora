@@ -182,4 +182,109 @@ class IntervalTest extends TestCase
             '100 hours is 4 hours past 4 days'
         );
     }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::setFactors
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function set_factors()
+    {
+        $interval = new Interval();
+
+
+        $interval->setFactors([
+            'microts' => [1, 'seconds'],
+            'cycles' => [86400, 'microts'],
+            'yarns' => [365, 'days'],
+        ]);
+
+        $interval->addMicrots(100000);
+
+        $this->assertEquals(
+            1,
+            $interval->cycles,
+            '100000 microts > 1 cycle'
+        );
+    }
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::setFactor
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function eight_hour_days()
+    {
+        $interval = new Interval();
+
+        $interval->setFactor('days', [8, 'hours']);
+
+        $interval->addHours(25);
+
+        $this->assertEquals(
+            3,
+            $interval->days,
+            '25 hours is 3 eight-hour days plus change'
+        );
+
+        $this->assertEquals(
+            1,
+            $interval->hours,
+            '25 hours leaves an extra hour after 3 eight-hour days'
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getFactors
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function get_factors()
+    {
+        $interval = new Interval();
+
+        $this->assertEquals(
+            [
+                'minutes' => [60, 'seconds'],
+                'hours' => [60, 'minutes'],
+                'days' => [24, 'hours'],
+            ],
+            $interval->getFactors()
+        );
+
+        $interval->setFactor('days', [8, 'hours']);
+
+        $this->assertEquals(
+            [
+                'minutes' => [60, 'seconds'],
+                'hours' => [60, 'minutes'],
+                'days' => [8, 'hours'],
+            ],
+            $interval->getFactors()
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getFactor
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function get_factor_for_days()
+    {
+        $interval = new Interval();
+
+        $interval->setFactor('days', [8, 'hours']);
+
+        $this->assertEquals(
+            [8, 'hours'],
+            $interval->getFactor('days')
+        );
+    }
 }
