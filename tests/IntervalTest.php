@@ -287,4 +287,29 @@ class IntervalTest extends TestCase
             $interval->getFactor('days')
         );
     }
+
+
+
+    /**
+     * @test
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function get_weeks()
+    {
+        $interval = new Interval();
+
+        $interval->setFactor('weeks', [7, 'days']);
+
+        $interval->addDays(365);
+
+        $this->assertEquals(
+            52,
+            $interval->weeks
+        );
+
+        $this->assertEquals(
+            1,
+            $interval->days
+        );
+    }
 }
