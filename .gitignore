@@ -1,8 +1,11 @@
 composer.lock
 package-lock.json
 
+coverage/
 docs/
 vendor/
+
+*.cache
 
 ### Sublime Text ###
 *.sublime-workspace

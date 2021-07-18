@@ -12,11 +12,11 @@
         }
     ],
     "require": {
-        "php": "^7.0"
+        "php": "^7.4"
     },
     "require-dev": {
-        "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^6.1"
+        "mockery/mockery": "^1.4.3",
+        "phpunit/phpunit": "^9.5.6"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +25,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SavvyWombat\\Ahora\\Tests\\": "tests/"
+            "SavvyWombat\\Ahora\\Test\\": "tests/"
         }
     }
 }

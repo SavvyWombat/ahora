@@ -1,7 +1,6 @@
 <?php
 
-
-namespace SavvyWombat\Ahora\Tests;
+namespace SavvyWombat\Ahora\Test;
 
 use PHPUnit\Framework\TestCase;
 use SavvyWombat\Ahora\Interval;
@@ -343,7 +342,6 @@ class IntervalTest extends TestCase
     /**
      * @test
      * @covers \SavvyWombat\Ahora\Interval::createFromDateInterval
-     * @uses \DateInterval
      * @uses \SavvyWombat\Ahora\Interval
      */
     public function create_from_date_interval()
