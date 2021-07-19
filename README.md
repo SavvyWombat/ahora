@@ -134,12 +134,7 @@ Obviously, changing these multipliers can have some drastic effects on the inter
     
 ## Support
 
-If you are having general issues with this repository, please contact us via
-the [SavvyWombat](https://savvywombat.com.au/contact) website.
-
 Please report issues using the [GitHub issue tracker](https://github.com/SavvyWombat/ahora/issues). You are also welcome to fork the repository and submit a pull request.
-
-If you're using this repository, we'd love to hear your thoughts. Thanks!
 
 ## Licence
 
