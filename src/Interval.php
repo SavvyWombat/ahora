@@ -147,6 +147,17 @@ class Interval
     }
 
     /**
+     * @param int $seconds
+     * @return Interval
+     */
+    public function subSeconds(int $seconds)
+    {
+        $this->realSeconds -= $seconds;
+
+        return $this;
+    }
+
+    /**
      * Add the specified amount of time to the interval (uses the __call method to allow addHours, for example)
      *
      * @param string $unit Any valid unit from the factors array, including the seconds array
@@ -167,6 +178,26 @@ class Interval
         $this->add($this->factors[$unit][1], (int) ($value * $this->factors[$unit][0]));
     }
 
+    /**
+     * Subtract the specified amount of time from the interval (uses the __call method to allow subHours, for example)
+     *
+     * @param string $unit Any valid unit from the factors array, including the seconds array
+     * @param int $value The number of units to subtract from the interval
+     * @throws \Exception
+     */
+    protected function sub(string $unit, int $value)
+    {
+        if ($unit === 'seconds') {
+            $this->subSeconds($value);
+            return;
+        }
+
+        if (!isset($this->factors[$unit])) {
+            throw new \Exception("'{$unit}' is not valid for this interval");
+        }
+
+        $this->sub($this->factors[$unit][1], (int) ($value * $this->factors[$unit][0]));
+    }
 
     /**
      * Get the number of seconds since the last whole minute in the interval
@@ -305,8 +336,6 @@ class Interval
         return null;
     }
 
-
-
     public function __get(string $name)
     {
         $func = "get" . ucfirst($name);
@@ -321,12 +350,15 @@ class Interval
         return $this->get($name);
     }
 
-
-
     public function __call(string $name, array $args)
     {
         if (substr($name, 0, 3) === "add") {
             $this->add(lcfirst(substr($name, 3)), $args[0]);
+            return $this;
+        }
+
+        if (substr($name, 0, 3) === "sub") {
+            $this->sub(lcfirst(substr($name, 3)), $args[0]);
             return $this;
         }
     }

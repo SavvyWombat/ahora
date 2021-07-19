@@ -36,6 +36,33 @@ class IntervalTest extends TestCase
 
     /**
      * @test
+     * @covers \SavvyWombat\Ahora\Interval::subSeconds
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function subtracting_seconds()
+    {
+        $interval = new Interval();
+
+        $this->assertEquals(
+            0,
+            $interval->seconds,
+            'default interval should have 0 seconds'
+        );
+
+
+        $interval->subSeconds(5);
+
+        $this->assertEquals(
+            -5,
+            $interval->seconds,
+            'interval should have removed 5 seconds'
+        );
+    }
+
+
+
+    /**
+     * @test
      * @covers \SavvyWombat\Ahora\Interval::getSeconds
      * @uses \SavvyWombat\Ahora\Interval
      */
@@ -49,6 +76,26 @@ class IntervalTest extends TestCase
             30,
             $interval->seconds,
             'interval should only return 30 seconds'
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::getSeconds
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function returns_negative_seconds_if_interval_is_negative()
+    {
+        $interval = new Interval();
+
+        $interval->subSeconds(140);
+
+        $this->assertEquals(
+            -20,
+            $interval->seconds,
+            'interval should return -20 seconds'
         );
     }
 
@@ -96,6 +143,26 @@ class IntervalTest extends TestCase
 
     /**
      * @test
+     * @covers \SavvyWombat\Ahora\Interval::get
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function works_with_negative_minutes()
+    {
+        $interval = new Interval();
+
+        $interval->subSeconds(150);
+
+        $this->assertEquals(
+            -2,
+            $interval->minutes,
+            'interval should return -2 minutes'
+        );
+    }
+
+
+
+    /**
+     * @test
      * @covers \SavvyWombat\Ahora\Interval::add
      * @uses \SavvyWombat\Ahora\Interval
      */
@@ -115,6 +182,32 @@ class IntervalTest extends TestCase
             600,
             $interval->realSeconds,
             'interval should return 600 real seconds'
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::sub
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function subtracting_minutes()
+    {
+        $interval = new Interval();
+
+        $interval->subMinutes(10);
+
+        $this->assertEquals(
+            -10,
+            $interval->minutes,
+            'interval should return -10 minutes'
+        );
+
+        $this->assertEquals(
+            -600,
+            $interval->realSeconds,
+            'interval should return -600 real seconds'
         );
     }
 
@@ -511,6 +604,7 @@ class IntervalTest extends TestCase
         return [
             '70 - 40 = 30' => ["PT70S", "PT40S", 30],
             '6 minutes - 250 seconds = 110 seconds ' => ["PT6M", "PT250S", 110],
+            '40 - 70 = -30' => ["PT40S", "PT70S", -30],
         ];
     }
 }
