@@ -16,7 +16,7 @@ class Interval
     /**
      * @var int The number of seconds in this interval
      */
-    protected $seconds = 0;
+    protected $realSeconds = 0;
 
 
     /**
@@ -116,7 +116,20 @@ class Interval
      */
     public function addInterval(Interval $otherInterval)
     {
-        $this->seconds += $otherInterval->realSeconds;
+        $this->realSeconds += $otherInterval->realSeconds;
+
+        return $this;
+    }
+
+    /**
+     * Subtract another interval from this one
+     *
+     * @param Interval $otherInterval
+     * @return Interval
+     */
+    public function subInterval(Interval $otherInterval)
+    {
+        $this->realSeconds -= $otherInterval->realSeconds;
 
         return $this;
     }
@@ -128,7 +141,7 @@ class Interval
      */
     public function addSeconds(int $seconds)
     {
-        $this->seconds += $seconds;
+        $this->realSeconds += $seconds;
 
         return $this;
     }
@@ -162,7 +175,7 @@ class Interval
      */
     protected function getSeconds()
     {
-        return $this->seconds % 60;
+        return $this->realSeconds % 60;
     }
 
     /**
@@ -172,7 +185,7 @@ class Interval
      */
     protected function getRealSeconds()
     {
-        return $this->seconds;
+        return $this->realSeconds;
     }
 
 

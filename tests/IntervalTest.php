@@ -318,21 +318,42 @@ class IntervalTest extends TestCase
      * @test
      * @covers \SavvyWombat\Ahora\Interval::addInterval
      * @uses \SavvyWombat\Ahora\Interval
+     * @dataProvider add_to_interval_provider
      */
-    public function add_another_interval()
+    public function add_to_interval($first, $second, $result)
     {
-        $interval = new Interval();
-        $interval->addSeconds(30);
+        $interval = Interval::createFromIntervalSpec($first);
 
 
-        $otherInterval = new Interval();
-        $otherInterval->addSeconds(70);
+        $otherInterval = Interval::createFromIntervalSpec($second);
 
 
         $interval->addInterval($otherInterval);
 
         $this->assertEquals(
-            100,
+            $result,
+            $interval->realSeconds
+        );
+    }
+
+
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::addInterval
+     * @uses \SavvyWombat\Ahora\Interval
+     * @dataProvider subtract_from_interval_provider
+     */
+    public function subtract_from_interval($first, $second, $result)
+    {
+        $interval = Interval::createFromIntervalSpec($first);
+
+        $otherInterval = Interval::createFromIntervalSpec($second);
+
+        $interval->subInterval($otherInterval);
+
+        $this->assertEquals(
+            $result,
             $interval->realSeconds
         );
     }
@@ -474,5 +495,22 @@ class IntervalTest extends TestCase
             $dateInterval->s,
             'incorrect number of seconds'
         );
+    }
+
+
+    public function add_to_interval_provider()
+    {
+        return [
+            '70 seconds + 40 seconds = 110 seconds' => ["PT70S", "PT40S", 110],
+            '6 minutes + 250 seconds = 610 seconds ' => ["PT6M", "PT250S", 610],
+        ];
+    }
+
+    public function subtract_from_interval_provider()
+    {
+        return [
+            '70 - 40 = 30' => ["PT70S", "PT40S", 30],
+            '6 minutes - 250 seconds = 110 seconds ' => ["PT6M", "PT250S", 110],
+        ];
     }
 }
