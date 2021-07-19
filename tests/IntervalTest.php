@@ -9,6 +9,115 @@ class IntervalTest extends TestCase
 {
     /**
      * @test
+     * @covers \SavvyWombat\Ahora\Interval::__construct
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function construct_from_interval_spec()
+    {
+        $interval = new Interval("P5DT4H3M2S");
+
+        $this->assertInstanceOf(
+            Interval::class,
+            $interval,
+            'did not create an Interval'
+        );
+
+        $this->assertEquals(
+            5,
+            $interval->days
+        );
+
+        $this->assertEquals(
+            4,
+            $interval->hours
+        );
+
+        $this->assertEquals(
+            3,
+            $interval->minutes
+        );
+
+        $this->assertEquals(
+            2,
+            $interval->seconds
+        );
+    }
+
+    /**
+     * @test
+     * @covers \SavvyWombat\Ahora\Interval::createFromDateInterval
+     * @uses \SavvyWombat\Ahora\Interval
+     */
+    public function create_from_date_interval()
+    {
+        $dateInterval = new \DateInterval("P2DT3H4M5S");
+
+        $interval = Interval::createFromDateInterval($dateInterval);
+
+        $this->assertInstanceOf(
+            Interval::class,
+            $interval,
+            'Interval not returned from create'
+        );
+
+        $this->assertEquals(
+            2,
+            $interval->days,
+            'incorrect number of days set'
+        );
+
+        $this->assertEquals(
+            3,
+            $interval->hours,
+            'incorrect number of hours set'
+        );
+
+        $this->assertEquals(
+            4,
+            $interval->minutes,
+            'incorrect number of minutes set'
+        );
+
+        $this->assertEquals(
+            5,
+            $interval->seconds,
+            'incorrect number of seconds set'
+        );
+    }
+
+    public function create_from_interval_spec()
+    {
+        $interval = Interval::createFromIntervalSpec("P10DT9H8M7S");
+
+        $this->assertInstanceOf(
+            Interval::class,
+            $interval,
+            'did not create an Interval'
+        );
+
+        $this->assertEquals(
+            10,
+            $interval->days
+        );
+
+        $this->assertEquals(
+            9,
+            $interval->hours
+        );
+
+        $this->assertEquals(
+            8,
+            $interval->minutes
+        );
+
+        $this->assertEquals(
+            7,
+            $interval->seconds
+        );
+    }
+
+    /**
+     * @test
      * @covers \SavvyWombat\Ahora\Interval::addSeconds
      * @uses \SavvyWombat\Ahora\Interval
      */
@@ -437,7 +546,7 @@ class IntervalTest extends TestCase
      * @uses \SavvyWombat\Ahora\Interval
      * @dataProvider subtract_from_interval_provider
      */
-    public function subtract_from_interval($first, $second, $result)
+    public function subtract_from_interval($first, $second, $expectedRealSeconds, $expectedMinutes, $expectedSeconds)
     {
         $interval = Interval::createFromIntervalSpec($first);
 
@@ -446,88 +555,20 @@ class IntervalTest extends TestCase
         $interval->subInterval($otherInterval);
 
         $this->assertEquals(
-            $result,
+            $expectedRealSeconds,
             $interval->realSeconds
         );
-    }
-
-
-
-    /**
-     * @test
-     * @covers \SavvyWombat\Ahora\Interval::createFromDateInterval
-     * @uses \SavvyWombat\Ahora\Interval
-     */
-    public function create_from_date_interval()
-    {
-        $dateInterval = new \DateInterval("P2DT3H4M5S");
-
-        $interval = Interval::createFromDateInterval($dateInterval);
-
-        $this->assertInstanceOf(
-            Interval::class,
-            $interval,
-            'Interval not returned from create'
-        );
 
         $this->assertEquals(
-            2,
-            $interval->days,
-            'incorrect number of days set'
-        );
-
-        $this->assertEquals(
-            3,
-            $interval->hours,
-            'incorrect number of hours set'
-        );
-
-        $this->assertEquals(
-            4,
-            $interval->minutes,
-            'incorrect number of minutes set'
-        );
-
-        $this->assertEquals(
-            5,
-            $interval->seconds,
-            'incorrect number of seconds set'
-        );
-    }
-
-
-    public function create_from_interval_spec()
-    {
-        $interval = Interval::createFromIntervalSpec("P10DT9H8M7S");
-
-        $this->assertInstancOf(
-            Interval::class,
-            $interval,
-            'did not create an Interval'
-        );
-
-        $this->assertEquals(
-            10,
-            $interval->days
-        );
-
-        $this->assertEquals(
-            9,
-            $interval->hours
-        );
-
-        $this->assertEquals(
-            8,
+            $expectedMinutes,
             $interval->minutes
         );
 
         $this->assertEquals(
-            7,
+            $expectedSeconds,
             $interval->seconds
         );
     }
-
-
 
     /**
      * @test
@@ -602,9 +643,10 @@ class IntervalTest extends TestCase
     public function subtract_from_interval_provider()
     {
         return [
-            '70 - 40 = 30' => ["PT70S", "PT40S", 30],
-            '6 minutes - 250 seconds = 110 seconds ' => ["PT6M", "PT250S", 110],
-            '40 - 70 = -30' => ["PT40S", "PT70S", -30],
+            '70 - 40 = 30' => ["PT70S", "PT40S", 30, 0, 30],
+            '6 minutes - 250 seconds = 110 seconds ' => ["PT6M", "PT250S", 110, 1, 50],
+            '40 - 70 = -30' => ["PT40S", "PT70S", -30, 0, -30],
+            '45 - 200 = -155' => ["PT45S", "PT200S", -155, -2, -35],
         ];
     }
 }

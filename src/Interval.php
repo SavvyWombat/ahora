@@ -30,6 +30,21 @@ class Interval
         'days' => [24, 'hours'],
     ];
 
+    /**
+     * Interval constructor.
+     * @param string $interval_spec Optional
+     */
+    public function __construct(string $interval_spec = '')
+    {
+        if ($interval_spec !== '') {
+            $di = new DateInterval($interval_spec);
+
+            $this->addDays($di->d);
+            $this->addHours($di->h);
+            $this->addMinutes($di->i);
+            $this->addSeconds($di->s);
+        }
+    }
 
     /**
      * Create an interval from a PHP DateInterval
@@ -59,7 +74,7 @@ class Interval
      * @return Interval
      * @throws \Exception
      */
-    public function createFromIntervalSpec(string $interval_spec)
+    public static function createFromIntervalSpec(string $interval_spec)
     {
         return self::createFromDateInterval(new DateInterval($interval_spec));
     }

@@ -14,16 +14,19 @@ Using [Composer](https://getcomposer.org/):
 
 ### Creation
 
-You can simply create a new interval which has zero time by creating a new instance:
+You can create a new interval as a new instance, optionally passing in an [ISO8601 interval specification](https://en.wikipedia.org/wiki/ISO_8601#Durations):
 
     use SavvyWombat\Ahora\Interval;
     
     $interval = new Interval();
-    
     echo $interval->seconds; // outputs 0
 
+    $interval = new Interval("PT100D"); // 100 days
+    echo $interval->seconds; // outputs 8640000
+
+
 Alternatively, you can create an interval from a PHP [DateInterval](http://php.net/manual/en/class.dateinterval.php),
-or from an [ISO8601 interval specification](https://en.wikipedia.org/wiki/ISO_8601#Durations):
+or from an interval specification with the following static methods:
     
     use SavvyWombat\Ahora\Interval;
     
@@ -47,6 +50,8 @@ Once you have an interval, you can easily add a number of seconds, minutes, hour
     $interval->addHours(24); // equivalent to $interval->addDays(1);
     $interval->addDays(7);
 
+#### Adding intervals
+
 It is also possible to add intervals together:
 
     $firstInterval = new Interval();
@@ -61,6 +66,23 @@ It is also possible to add intervals together:
     echo $firstInterval->minutes; // outputs 1
     
     echo $firstInterval->realSeconds; // outputs 115
+
+#### Subtracting intervals
+
+Similarly, you can subtract an interval from another:
+
+    $firstInterval = new Interval();
+    $firstInterval->addSeconds(45);
+
+    $secondInterval = new Interval();
+    $secondInterval->addSeconds(200);
+    
+    $firstInterval->subInterval($secondInterval);
+    
+    echo $firstInterval->seconds; // outputs -35
+    echo $firstInterval->minutes; // outputs -2
+    
+    echo $firstInterval->realSeconds; // outputs -155
 
 ### Units and factors
 
